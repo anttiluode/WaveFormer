@@ -1,0 +1,67 @@
+{
+  "status": "smoke-only, no scientific inference",
+  "task": "Two independently marked value slots; late query A/B; four possible outputs.",
+  "controls": "same training examples and held-out seeds; wave versus phase-disabled real recurrence",
+  "caveats": [
+    "The model does not use pretrained language-model weights.",
+    "A single seed is not a replication; run multiple seeds and retain all outcomes.",
+    "Python recurrent time loop is not an optimized streaming kernel, so training-time comparisons are not architectural throughput conclusions.",
+    "The attention and recurrent heads have similar but non-identical parameter counts; counts are reported.",
+    "No hidden state survives between independently sampled examples; recurrence is within each episode.",
+    "Only final classification is scored; no autonomous imagination, external world model, or text generation is shown."
+  ],
+  "seed": 42,
+  "steps": 2,
+  "batch_size": 8,
+  "train_length": 12,
+  "test_lengths": [
+    12,
+    24
+  ],
+  "eval_examples_per_length": 8,
+  "device": "cuda",
+  "variants": [
+    {
+      "variant": "attention",
+      "trainable_parameters": 38308,
+      "train_loss_ema": 1.9470609855651855,
+      "heldout_exact_accuracy": {
+        "12": 0.125,
+        "24": 0.25
+      },
+      "without_recurrent_head": null,
+      "training_wall_seconds": 0.540255400002934,
+      "peak_cuda_allocated_bytes": 19243008
+    },
+    {
+      "variant": "leaky",
+      "trainable_parameters": 38908,
+      "train_loss_ema": 1.6037648153305053,
+      "heldout_exact_accuracy": {
+        "12": 0.0,
+        "24": 0.375
+      },
+      "without_recurrent_head": {
+        "12": 0.0,
+        "24": 0.375
+      },
+      "training_wall_seconds": 0.10063450000598095,
+      "peak_cuda_allocated_bytes": 19298816
+    },
+    {
+      "variant": "wave",
+      "trainable_parameters": 38920,
+      "train_loss_ema": 1.5903754234313965,
+      "heldout_exact_accuracy": {
+        "12": 0.0,
+        "24": 0.375
+      },
+      "without_recurrent_head": {
+        "12": 0.0,
+        "24": 0.375
+      },
+      "training_wall_seconds": 0.11511780000000726,
+      "peak_cuda_allocated_bytes": 19336192
+    }
+  ]
+}
