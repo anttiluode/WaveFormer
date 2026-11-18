@@ -1,0 +1,176 @@
+{
+  "status": "source-reported trained synthetic benchmark",
+  "seed": 44,
+  "steps": 1000,
+  "train_length": 24,
+  "test_lengths": [
+    24,
+    48,
+    96
+  ],
+  "eval_n_each": 512,
+  "window": 4,
+  "min_gap": 9,
+  "local_attention_max_reach": 6,
+  "device": "cuda",
+  "data": "Two marked writes with distinct values; all writes outside local-query receptive field.",
+  "limits": [
+    "No pretrained language model, text generation, native persistent external state or imagined environment.",
+    "Three seeds are exploratory; a phase advantage needs paired, head-essential comparisons.",
+    "Full-attention is an architectural reference, while local-attention proves the local-only task is impossible beyond the cutoff.",
+    "Every variant trains on the same sampled world batches and is tested on the same fresh examples.",
+    "The recurrent head is sequential Python, not an optimized kernel; do not infer GPU speed advantages."
+  ],
+  "variants": [
+    {
+      "variant": "full_attention",
+      "trainable_parameters": 38308,
+      "final_train_ema_loss": 0.00011988299853848289,
+      "accuracy": {
+        "24": {
+          "intact": {
+            "correct": 512,
+            "n": 512,
+            "accuracy": 1.0
+          }
+        },
+        "48": {
+          "intact": {
+            "correct": 436,
+            "n": 512,
+            "accuracy": 0.8515625
+          }
+        },
+        "96": {
+          "intact": {
+            "correct": 333,
+            "n": 512,
+            "accuracy": 0.650390625
+          }
+        }
+      },
+      "training_wall_seconds": 18.732541799996397,
+      "peak_cuda_allocated_bytes": 28733952
+    },
+    {
+      "variant": "local_attention",
+      "trainable_parameters": 38308,
+      "final_train_ema_loss": 1.386429164846605,
+      "accuracy": {
+        "24": {
+          "intact": {
+            "correct": 132,
+            "n": 512,
+            "accuracy": 0.2578125
+          }
+        },
+        "48": {
+          "intact": {
+            "correct": 139,
+            "n": 512,
+            "accuracy": 0.271484375
+          }
+        },
+        "96": {
+          "intact": {
+            "correct": 138,
+            "n": 512,
+            "accuracy": 0.26953125
+          }
+        }
+      },
+      "training_wall_seconds": 19.7037124999988,
+      "peak_cuda_allocated_bytes": 28733952
+    },
+    {
+      "variant": "leaky",
+      "trainable_parameters": 38908,
+      "final_train_ema_loss": 0.00023844710667781098,
+      "accuracy": {
+        "24": {
+          "intact": {
+            "correct": 512,
+            "n": 512,
+            "accuracy": 1.0
+          },
+          "recurrent_zeroed": {
+            "correct": 133,
+            "n": 512,
+            "accuracy": 0.259765625
+          }
+        },
+        "48": {
+          "intact": {
+            "correct": 485,
+            "n": 512,
+            "accuracy": 0.947265625
+          },
+          "recurrent_zeroed": {
+            "correct": 118,
+            "n": 512,
+            "accuracy": 0.23046875
+          }
+        },
+        "96": {
+          "intact": {
+            "correct": 296,
+            "n": 512,
+            "accuracy": 0.578125
+          },
+          "recurrent_zeroed": {
+            "correct": 111,
+            "n": 512,
+            "accuracy": 0.216796875
+          }
+        }
+      },
+      "training_wall_seconds": 56.289805100001104,
+      "peak_cuda_allocated_bytes": 28746752
+    },
+    {
+      "variant": "wave",
+      "trainable_parameters": 38920,
+      "final_train_ema_loss": 0.5586600078263118,
+      "accuracy": {
+        "24": {
+          "intact": {
+            "correct": 399,
+            "n": 512,
+            "accuracy": 0.779296875
+          },
+          "recurrent_zeroed": {
+            "correct": 124,
+            "n": 512,
+            "accuracy": 0.2421875
+          }
+        },
+        "48": {
+          "intact": {
+            "correct": 294,
+            "n": 512,
+            "accuracy": 0.57421875
+          },
+          "recurrent_zeroed": {
+            "correct": 128,
+            "n": 512,
+            "accuracy": 0.25
+          }
+        },
+        "96": {
+          "intact": {
+            "correct": 207,
+            "n": 512,
+            "accuracy": 0.404296875
+          },
+          "recurrent_zeroed": {
+            "correct": 125,
+            "n": 512,
+            "accuracy": 0.244140625
+          }
+        }
+      },
+      "training_wall_seconds": 111.06148060000123,
+      "peak_cuda_allocated_bytes": 28748288
+    }
+  ]
+}

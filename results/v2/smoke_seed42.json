@@ -1,0 +1,137 @@
+{
+  "status": "smoke only",
+  "seed": 42,
+  "steps": 2,
+  "train_length": 16,
+  "test_lengths": [
+    16,
+    24
+  ],
+  "eval_n_each": 8,
+  "window": 3,
+  "min_gap": 7,
+  "local_attention_max_reach": 4,
+  "device": "cuda",
+  "data": "Two marked writes with distinct values; all writes outside local-query receptive field.",
+  "limits": [
+    "No pretrained language model, text generation, native persistent external state or imagined environment.",
+    "Three seeds are exploratory; a phase advantage needs paired, head-essential comparisons.",
+    "Full-attention is an architectural reference, while local-attention proves the local-only task is impossible beyond the cutoff.",
+    "Every variant trains on the same sampled world batches and is tested on the same fresh examples.",
+    "The recurrent head is sequential Python, not an optimized kernel; do not infer GPU speed advantages."
+  ],
+  "variants": [
+    {
+      "variant": "full_attention",
+      "trainable_parameters": 38308,
+      "final_train_ema_loss": 1.4019993591308595,
+      "accuracy": {
+        "16": {
+          "intact": {
+            "correct": 2,
+            "n": 8,
+            "accuracy": 0.25
+          }
+        },
+        "24": {
+          "intact": {
+            "correct": 3,
+            "n": 8,
+            "accuracy": 0.375
+          }
+        }
+      },
+      "training_wall_seconds": 0.24820879999606404,
+      "peak_cuda_allocated_bytes": 19417088
+    },
+    {
+      "variant": "local_attention",
+      "trainable_parameters": 38308,
+      "final_train_ema_loss": 1.5034023237228393,
+      "accuracy": {
+        "16": {
+          "intact": {
+            "correct": 2,
+            "n": 8,
+            "accuracy": 0.25
+          }
+        },
+        "24": {
+          "intact": {
+            "correct": 5,
+            "n": 8,
+            "accuracy": 0.625
+          }
+        }
+      },
+      "training_wall_seconds": 0.1198692000034498,
+      "peak_cuda_allocated_bytes": 19417088
+    },
+    {
+      "variant": "leaky",
+      "trainable_parameters": 38908,
+      "final_train_ema_loss": 1.5972856712341308,
+      "accuracy": {
+        "16": {
+          "intact": {
+            "correct": 2,
+            "n": 8,
+            "accuracy": 0.25
+          },
+          "recurrent_zeroed": {
+            "correct": 2,
+            "n": 8,
+            "accuracy": 0.25
+          }
+        },
+        "24": {
+          "intact": {
+            "correct": 3,
+            "n": 8,
+            "accuracy": 0.375
+          },
+          "recurrent_zeroed": {
+            "correct": 3,
+            "n": 8,
+            "accuracy": 0.375
+          }
+        }
+      },
+      "training_wall_seconds": 0.0749735999997938,
+      "peak_cuda_allocated_bytes": 19486720
+    },
+    {
+      "variant": "wave",
+      "trainable_parameters": 38920,
+      "final_train_ema_loss": 1.5835396814346312,
+      "accuracy": {
+        "16": {
+          "intact": {
+            "correct": 2,
+            "n": 8,
+            "accuracy": 0.25
+          },
+          "recurrent_zeroed": {
+            "correct": 2,
+            "n": 8,
+            "accuracy": 0.25
+          }
+        },
+        "24": {
+          "intact": {
+            "correct": 3,
+            "n": 8,
+            "accuracy": 0.375
+          },
+          "recurrent_zeroed": {
+            "correct": 3,
+            "n": 8,
+            "accuracy": 0.375
+          }
+        }
+      },
+      "training_wall_seconds": 0.15322639999794774,
+      "peak_cuda_allocated_bytes": 19536384
+    }
+  ]
+}
