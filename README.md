@@ -2,7 +2,39 @@
 
 **One attention head versus one resonant recurrent head.** A deliberately small, falsifiable comparison proposed from the WaveComputer, GeometricNeuron, TuftSheet, OneTinyTransformer and Qwenimagination research lines.
 
-**Status: code and tests committed; a real trained benchmark is not yet reported.** Do not interpret a passing smoke test as scientific evidence.
+**V1 status: three trained seed results now committed (42–44).** All arms reach 100% at the 24-token training length. At length 48 the means are attention 76.95%, leaky 78.45%, wave 83.01%; at 96 they are 56.12%, 51.24%, 54.62%. **Zeroing the trained recurrent head changes accuracy by at most ~0.13 percentage points on average**: V1 does **not** establish useful wave computation. Measured training wall-time was roughly 14 s attention, 37 s leaky, 56 s wave per seed on the user's CUDA setup; this compares unoptimized implementations, not optimized throughput.
+
+**V2 status: local-attention cutoff and far-memory experiment implemented; trained results pending.** V1 source and receipts are preserved unchanged.
+
+## V2: make recurrence essential before comparing resonance
+
+V1 trained all three variants on the same synthetic two-slot task, but ablation proved the second recurrent head is nearly unused. This is unsurprising: V1 has two *full-attention* heads in the first block and another full-attention head in the final block. The model can solve the task through those paths.
+
+V2 keeps the V1 files and results intact, but adds a **predefined receptive-field intervention**:
+
+- `full_attention`: two blocks of ordinary global Q/K/V attention, a retrieval reference.
+- `local_attention`: two blocks of attention restricted to a window of 4 tokens, no long-range recurrent head.
+- `leaky`: the same local heads plus a single real-valued recurrent head in the last block.
+- `wave`: the same local heads plus a single damped phase-rotating recurrent head in the last block.
+
+At depth 2 and window 4, local-only attention at the final token can see at most **6 prior positions**. The generator ensures both write/value pairs end **at least 9 positions before the query**. Their information therefore **cannot** reach the final query through local attention alone; if either recurrent hybrid succeeds, its recurrent pathway must be involved. The first block's local head can see the write marker directly before the value token.
+
+The task and token semantics remain the same as V1. Training and evaluation use paired seeds, 24-token training sequences and fresh 24/48/96-token episodes. The runner reports both intact and recurrent-zeroed accuracy on **the exact same examples**. Tests explicitly verify that when the recurrent pathway is removed, modifying distant tokens cannot influence the answer.
+
+```powershell
+git pull --ff-only
+python3.13 -m unittest discover -s tests -v
+python3.13 run_v2.py --smoke
+python3.13 run_v2.py --steps 1000 --seed 42
+python3.13 run_v2.py --steps 1000 --seed 43
+python3.13 run_v2.py --steps 1000 --seed 44
+```
+
+Results are written under `results/v2/` and are never allowed to overwrite V1 receipts. A smoke run is only a check that training and evaluation execute.
+
+The V2 **first gate** is that `local_attention` remains near the four-way chance baseline (25%) while a hybrid exceeds it, and zeroing that hybrid's recurrent head removes the advantage. Only after that gate passes is a **wave > leaky** result evidence worth investigating. If the wave arm does not beat leaky on paired seeds, recurrence alone suffices for this task. A full-attention model is retained as an information-access upper reference. A single seed or a narrow training distribution is not a generalization claim.
+
+Note that this benchmark does not implement continuous real-time operating state across episodes, active imagination, or any pretrained-language-model replacement. Training speed comparisons remain implementation-dependent.
 
 ## What is actually replaced?
 
